@@ -1,5 +1,7 @@
 import itertools
 import whois
+import subprocess
+import re
 import time
 
 # Prefixes and suffixes with branding value
@@ -22,20 +24,28 @@ filtered_domains = list(dict.fromkeys(filtered_domains))  # Remove duplicates
 # Limit to 300
 candidate_domains = filtered_domains[:300]
 
-# WHOIS check
 def is_available(domain):
     try:
-        w = whois.whois(domain)
-        # Debug print of the raw whois response
-        print(f"DEBUG: whois result for {domain}: {w}")
-        # whois.whois returns an object with .domain_name when taken
-        if w and w.domain_name:
-            return False  # Taken
+        # Use system whois command
+        result = subprocess.run(
+            ["whois", domain],
+            capture_output=True,
+            text=True,
+            timeout=15
+        )
+        output = result.stdout + result.stderr
+        # Debug print of the raw whois output
+        print(f"DEBUG: whois output for {domain}: {output}")
+        # Check common patterns indicating the domain is available
+        if re.search(r"No match for", output, re.IGNORECASE) \
+           or re.search(r"NOT FOUND", output, re.IGNORECASE) \
+           or re.search(r"No entries found", output, re.IGNORECASE):
+            return True
         else:
-            return True   # Available
+            return False
     except Exception as e:
-        print(f"DEBUG: whois exception for {domain}: {e}")
-        # If there's an exception, assume domain is taken to avoid false positives
+        print(f"DEBUG: whois subprocess exception for {domain}: {e}")
+        # On error, assume taken to avoid false positives
         return False
 
 available_domains = []
