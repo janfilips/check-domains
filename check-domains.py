@@ -81,7 +81,7 @@ for domain in candidate_domains:
        or re.search(r"No entries found", output, re.IGNORECASE):
         print(f"{RED}Available{RESET}")
         available_domains.append(domain)
-        selected_file.write(domain + "\n")
+        selected_file.write(f"{domain} | Available\n")
         selected_file.flush()
         os.fsync(selected_file.fileno())
     else:
@@ -109,7 +109,7 @@ for domain in candidate_domains:
             exp_disp = expiry_date.date().isoformat()
             if days_left <= NEAR_EXPIRY_DAYS:
                 exp_disp = f"{YELLOW}{exp_disp}{RESET}"
-                selected_file.write(f"{domain} (expires in {days_left} days)\n")
+                selected_file.write(f"{domain} | Created: {creation_disp}, Expires: {expiry_date.date().isoformat()} (in {days_left} days)\n")
                 selected_file.flush()
                 os.fsync(selected_file.fileno())
         else:
