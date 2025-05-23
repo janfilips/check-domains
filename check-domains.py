@@ -31,6 +31,7 @@ RESET = "\033[0m"
 
 # Prefixes and suffixes with branding value
 prefixes = list(dict.fromkeys([
+    "mrdka",
     "spam",
     "mail", "pulse", "inbox", "clear", "swift", "zap", "trust", "true", "clean",
     "fast", "pro", "safe", "quick", "smart", "spot", "net", "prime", "core", "boost",
@@ -42,10 +43,8 @@ suffixes = list(dict.fromkeys([
     "bounce", "guard", "check", "verify", "pulse", "shield", "radar", "sense", "wave", "hero", "clear", "swift", "spot", "scan", "edge", "boost", "nexus", "hub"
 ]))
 
-# Generate all combinations and filter for "mail" or "pulse"
 all_domains = [f"{p}{s}.com" for p, s in itertools.product(prefixes, suffixes)]
-filtered_domains = [d for d in all_domains if "mail" in d or "pulse" in d]
-filtered_domains = list(dict.fromkeys(filtered_domains))  # Remove duplicates
+filtered_domains = all_domains
 
 # Limit to 300
 candidate_domains = filtered_domains[:300]
