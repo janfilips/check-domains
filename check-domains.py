@@ -4,6 +4,7 @@ import subprocess
 import re
 import time
 from datetime import datetime, timezone
+import os
 
 # File to record free or near-expiry domains
 selected_file = open('selected_domains.txt', 'w')
@@ -80,6 +81,8 @@ for domain in candidate_domains:
         print(f"{RED}Available{RESET}")
         available_domains.append(domain)
         selected_file.write(domain + "\n")
+        selected_file.flush()
+        os.fsync(selected_file.fileno())
     else:
         # Extract creation and expiration dates
         creation_match = re.search(r"Creation Date:\s*(\S+)", output)
@@ -106,6 +109,8 @@ for domain in candidate_domains:
             if days_left < 30:
                 exp_disp = f"{YELLOW}{exp_disp}{RESET}"
                 selected_file.write(domain + "\n")
+                selected_file.flush()
+                os.fsync(selected_file.fileno())
         else:
             exp_disp = "Unknown"
         print(f"Created: {creation_disp}, Expires: {exp_disp}")
