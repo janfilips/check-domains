@@ -5,6 +5,9 @@ import re
 import time
 from datetime import datetime, timezone
 
+# File to record free or near-expiry domains
+selected_file = open('selected_domains.txt', 'w')
+
 def run_whois_output(domain, retries=3, delay=5):
     for attempt in range(1, retries + 1):
         try:
@@ -76,6 +79,7 @@ for domain in candidate_domains:
        or re.search(r"No entries found", output, re.IGNORECASE):
         print(f"{RED}Available{RESET}")
         available_domains.append(domain)
+        selected_file.write(domain + "\n")
     else:
         # Extract creation and expiration dates
         creation_match = re.search(r"Creation Date:\s*(\S+)", output)
@@ -101,6 +105,7 @@ for domain in candidate_domains:
             exp_disp = expiry_date.date().isoformat()
             if days_left < 30:
                 exp_disp = f"{YELLOW}{exp_disp}{RESET}"
+                selected_file.write(domain + "\n")
         else:
             exp_disp = "Unknown"
         print(f"Created: {creation_disp}, Expires: {exp_disp}")
@@ -109,3 +114,5 @@ for domain in candidate_domains:
 print("\n✅ Available Domains:")
 for d in available_domains:
     print(d)
+
+selected_file.close()
