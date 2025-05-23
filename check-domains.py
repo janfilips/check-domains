@@ -3,6 +3,9 @@ import whois
 import subprocess
 import re
 import time
+from datetime import datetime, timezone
+RED = "\033[31m"
+RESET = "\033[0m"
 
 # Prefixes and suffixes with branding value
 prefixes = list(dict.fromkeys([
@@ -50,14 +53,54 @@ def is_available(domain):
 
 available_domains = []
 
-print("Checking domain availability (this will take a few minutes)...")
+print("Checking domain info (this will take a few minutes)...")
 for domain in candidate_domains:
-    print(f"Checking {domain}...", end="")
-    available = is_available(domain)
-    print(" Available!" if available else " Taken.")
-    if available:
-        available_domains.append(domain)
-    time.sleep(1)  # Be gentle to WHOIS servers
+    print(f"{domain}:", end=" ")
+    try:
+        result = subprocess.run(
+            ["whois", domain],
+            capture_output=True,
+            text=True,
+            timeout=15
+        )
+        output = result.stdout + result.stderr
+        # Determine availability
+        if re.search(r"No match for", output, re.IGNORECASE) \
+           or re.search(r"NOT FOUND", output, re.IGNORECASE) \
+           or re.search(r"No entries found", output, re.IGNORECASE):
+            print("Available")
+            available_domains.append(domain)
+        else:
+            # Extract creation and expiration dates
+            creation_match = re.search(r"Creation Date:\s*(\S+)", output)
+            expiry_match = re.search(r"Registry Expiry Date:\s*(\S+)", output) \
+                or re.search(r"Expiration Date:\s*(\S+)", output)
+            creation_str = creation_match.group(1) if creation_match else None
+            expiry_str = expiry_match.group(1) if expiry_match else None
+            creation_date = None
+            expiry_date = None
+            if creation_str:
+                try:
+                    creation_date = datetime.fromisoformat(creation_str.replace('Z', '+00:00'))
+                except:
+                    pass
+            if expiry_str:
+                try:
+                    expiry_date = datetime.fromisoformat(expiry_str.replace('Z', '+00:00'))
+                except:
+                    pass
+            creation_disp = creation_date.date().isoformat() if creation_date else "Unknown"
+            if expiry_date:
+                days_left = (expiry_date - datetime.now(timezone.utc)).days
+                exp_disp = expiry_date.date().isoformat()
+                if days_left < 30:
+                    exp_disp = f"{RED}{exp_disp}{RESET}"
+            else:
+                exp_disp = "Unknown"
+            print(f"Created: {creation_disp}, Expires: {exp_disp}")
+    except Exception as e:
+        print(f"Error retrieving info for {domain}: {e}")
+    time.sleep(1)
 
 print("\n✅ Available Domains:")
 for d in available_domains:
