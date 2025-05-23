@@ -9,7 +9,7 @@ import os
 # File to record free or near-expiry domains
 selected_file = open('selected_domains.txt', 'w')
 
-def run_whois_output(domain, retries=3, delay=5):
+def run_whois_output(domain, retries=3, delay=0.1):
     for attempt in range(1, retries + 1):
         try:
             result = subprocess.run(
@@ -34,9 +34,7 @@ NEAR_EXPIRY_DAYS = 60
 
 # Prefixes and suffixes with branding value
 prefixes = list(dict.fromkeys([
-    "mrdka",
-    "spam",
-    "mail", "pulse", "inbox", "clear", "swift", "zap", "trust", "true", "clean",
+    "spam", "mail", "pulse", "inbox", "clear", "swift", "zap", "trust", "true", "clean",
     "fast", "pro", "safe", "quick", "smart", "spot", "net", "prime", "core", "boost",
     "mail", "inbox", "bounce", "verify", "check", "email", "clear", "pure", "swift", "zap", "trust", "true", "pulse", "sense", "zero", "hero", "guard", "shield", "radar", "probe", "scout", "clean", "spot", "scan"
 ]))
