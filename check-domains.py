@@ -25,21 +25,28 @@ candidate_domains = filtered_domains[:300]
 # WHOIS check
 def is_available(domain):
     try:
-        whois.whois(domain)
-        return False  # Taken
-    except:
-        return True   # Likely available
+        w = whois.whois(domain)
+        # Debug print of the raw whois response
+        print(f"DEBUG: whois result for {domain}: {w}")
+        # whois.whois returns an object with .domain_name when taken
+        if w and w.domain_name:
+            return False  # Taken
+        else:
+            return True   # Available
+    except Exception as e:
+        print(f"DEBUG: whois exception for {domain}: {e}")
+        # If there's an exception, assume domain is taken to avoid false positives
+        return False
 
 available_domains = []
 
 print("Checking domain availability (this will take a few minutes)...")
 for domain in candidate_domains:
     print(f"Checking {domain}...", end="")
-    if is_available(domain):
+    available = is_available(domain)
+    print(" Available!" if available else " Taken.")
+    if available:
         available_domains.append(domain)
-        print(" Available!")
-    else:
-        print(" Taken.")
     time.sleep(1)  # Be gentle to WHOIS servers
 
 print("\n✅ Available Domains:")
