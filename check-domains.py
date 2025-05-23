@@ -31,6 +31,7 @@ RESET = "\033[0m"
 
 # Prefixes and suffixes with branding value
 prefixes = list(dict.fromkeys([
+    "spam",
     "mail", "pulse", "inbox", "clear", "swift", "zap", "trust", "true", "clean",
     "fast", "pro", "safe", "quick", "smart", "spot", "net", "prime", "core", "boost",
     "mail", "inbox", "bounce", "verify", "check", "email", "clear", "pure", "swift", "zap", "trust", "true", "pulse", "sense", "zero", "hero", "guard", "shield", "radar", "probe", "scout", "clean", "spot", "scan"
