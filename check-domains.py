@@ -5,6 +5,7 @@ import re
 import time
 from datetime import datetime, timezone
 RED = "\033[31m"
+YELLOW = "\033[33m"
 RESET = "\033[0m"
 
 # Prefixes and suffixes with branding value
@@ -68,7 +69,7 @@ for domain in candidate_domains:
         if re.search(r"No match for", output, re.IGNORECASE) \
            or re.search(r"NOT FOUND", output, re.IGNORECASE) \
            or re.search(r"No entries found", output, re.IGNORECASE):
-            print("Available")
+            print(f"{RED}Available{RESET}")
             available_domains.append(domain)
         else:
             # Extract creation and expiration dates
@@ -94,7 +95,7 @@ for domain in candidate_domains:
                 days_left = (expiry_date - datetime.now(timezone.utc)).days
                 exp_disp = expiry_date.date().isoformat()
                 if days_left < 30:
-                    exp_disp = f"{RED}{exp_disp}{RESET}"
+                    exp_disp = f"{YELLOW}{exp_disp}{RESET}"
             else:
                 exp_disp = "Unknown"
             print(f"Created: {creation_disp}, Expires: {exp_disp}")
