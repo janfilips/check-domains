@@ -38,12 +38,14 @@ prefixes = list(dict.fromkeys([
     "fast", "safe", "quick", "smart", "spot", "net", "prime", "core", "boost",
     "mail", "inbox", "bounce", "verify", "check", "email", "clear", "pure", "swift", "zap", "trust", "true", "pulse", "sense", "zero", "hero", "guard", "shield", "radar", "probe", "scout", "clean", "spot", "scan",
     "zero", "zreo", "xero",
+    "secure", "rapid", "spark", "ignite", "launch", "scale", "grow", "vault", "echo", "beam", "click", "flutter",
 ]))
 suffixes = list(dict.fromkeys([
     "pulse", "mail", "check", "verify", "guard", "scan", "wave", "hero", "zone",
     "hub", "flux", "deck", "base", "spot", "nexus", "beacon", "craft", "works", "dock",
     "bounce", "guard", "check", "verify", "pulse", "shield", "radar", "sense", "wave", "hero", "clear", "swift", "spot", "scan", "edge", "boost", "nexus", "hub",
     "bounce", "bounce",
+    "labs", "tech", "hive", "vault", "plus", "360", "pro", "gen",
 ]))
 
 all_domains = [f"{p}{s}.com" for p, s in itertools.product(prefixes, suffixes)]
