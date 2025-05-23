@@ -36,12 +36,14 @@ NEAR_EXPIRY_DAYS = 60
 prefixes = list(dict.fromkeys([
     "spam", "mail", "pulse", "inbox", "clear", "swift", "trust", "true", "clean",
     "fast", "safe", "quick", "smart", "spot", "net", "prime", "core", "boost",
-    "mail", "inbox", "bounce", "verify", "check", "email", "clear", "pure", "swift", "zap", "trust", "true", "pulse", "sense", "zero", "hero", "guard", "shield", "radar", "probe", "scout", "clean", "spot", "scan"
+    "mail", "inbox", "bounce", "verify", "check", "email", "clear", "pure", "swift", "zap", "trust", "true", "pulse", "sense", "zero", "hero", "guard", "shield", "radar", "probe", "scout", "clean", "spot", "scan",
+    "zero", "zreo", "xero",
 ]))
 suffixes = list(dict.fromkeys([
     "pulse", "mail", "check", "verify", "guard", "scan", "wave", "hero", "zone",
     "hub", "flux", "deck", "base", "spot", "nexus", "beacon", "craft", "works", "dock",
-    "bounce", "guard", "check", "verify", "pulse", "shield", "radar", "sense", "wave", "hero", "clear", "swift", "spot", "scan", "edge", "boost", "nexus", "hub"
+    "bounce", "guard", "check", "verify", "pulse", "shield", "radar", "sense", "wave", "hero", "clear", "swift", "spot", "scan", "edge", "boost", "nexus", "hub",
+    "bounce", "bouce",
 ]))
 
 all_domains = [f"{p}{s}.com" for p, s in itertools.product(prefixes, suffixes)]
