@@ -29,6 +29,9 @@ RED = "\033[31m"
 YELLOW = "\033[33m"
 RESET = "\033[0m"
 
+# Threshold in days for considering a domain "close to expiry"
+NEAR_EXPIRY_DAYS = 60
+
 # Prefixes and suffixes with branding value
 prefixes = list(dict.fromkeys([
     "mrdka",
@@ -106,7 +109,7 @@ for domain in candidate_domains:
         if expiry_date:
             days_left = (expiry_date - datetime.now(timezone.utc)).days
             exp_disp = expiry_date.date().isoformat()
-            if days_left < 30:
+            if days_left <= NEAR_EXPIRY_DAYS:
                 exp_disp = f"{YELLOW}{exp_disp}{RESET}"
                 selected_file.write(domain + "\n")
                 selected_file.flush()
